@@ -8,9 +8,10 @@ package:
     - lambda_function.py
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.7
   region: ap-south-1
   stage: prod
+  iamRoleARN: arn:aws:iam::237918227349:role/service-role/kpi-udm-prod-encounter-superset-role-i4bgyhj3
   deploymentBucket: lambda2129
   lambdaHashingVersion: 20210705
 
