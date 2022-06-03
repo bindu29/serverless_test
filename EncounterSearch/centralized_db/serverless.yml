@@ -1,0 +1,24 @@
+service: post_api_python
+frameworkVersion: "3"
+
+package:
+
+  include:
+    - es_controller.py
+    - lambda_function.py
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+
+
+
+functions:
+  EncounterSearch:
+    handler: handler.EncounterSearch
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+
