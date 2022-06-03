@@ -17,8 +17,5 @@ provider:
 functions:
   encounter-superset:
     handler: handler.encounter-superset
-    events:
-      - http:
-          path: /EncounterSearch
-          method: post
+
 
