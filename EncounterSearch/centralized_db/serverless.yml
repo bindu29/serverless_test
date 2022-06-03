@@ -1,4 +1,4 @@
-service: post-api-python
+service: kpi-udm
 frameworkVersion: "3"
 
 package:
