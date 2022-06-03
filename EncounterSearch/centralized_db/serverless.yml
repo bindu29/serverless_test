@@ -10,6 +10,7 @@ provider:
   name: aws
   runtime: python3.8
   region: ap-south-1
+  stage: prod
 
 
 
