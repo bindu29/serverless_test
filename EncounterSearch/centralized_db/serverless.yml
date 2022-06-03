@@ -19,7 +19,7 @@ functions:
     handler: handler.EncounterSearch
     events:
       - http:
-          path: /
+          path: /EncounterSearch
           method: post
           cors: true
 
