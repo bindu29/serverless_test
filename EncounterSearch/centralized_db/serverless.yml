@@ -15,11 +15,10 @@ provider:
 
 
 functions:
-  EncounterSearch:
+  encounter-superset:
     handler: handler.encounter-superset
     events:
       - http:
           path: /EncounterSearch
           method: post
-          cors: true
 
