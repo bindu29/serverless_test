@@ -1,4 +1,4 @@
-service: kpi-udm
+service: post-api-python
 frameworkVersion: "3"
 
 package:
@@ -15,7 +15,7 @@ provider:
 
 
 functions:
-  encounter-superset:
+  EncounterSearch:
     handler: handler.encounter-superset
     events:
       - http:
