@@ -8,9 +8,9 @@ package:
     - lambda_function.py
 provider:
    name: aws
-   stage: dev
+   stage: prod
    region: ap-south-1
-   runtime: python3.8
+   runtime: python3.7
    lambdaHashingVersion: 20201221
    deploymentBucket: lambda2129
    iam:
@@ -25,7 +25,7 @@ provider:
      functionName: kpi-udm-prod-encounter-superset
      functionArn: arn:aws:lambda:ap-south-1:237918227349:function:kpi-udm-prod-encounter-superset	 
 functions:
-  EncounterSearch:
+  encounter-superset:
     handler: handler.encounter-superset
     role: arn:aws:iam::237918227349:role/lambda_basic_execution
     events:
