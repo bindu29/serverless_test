@@ -17,12 +17,12 @@ provider:
       role: arn:aws:iam::237918227349:role/lambda_basic_execution
    httpApi:
      id: 4t2duf2oz4
-	 name: kpi-superset-api
-	 cors: true
+     name: kpi-superset-api
+     cors: true
    someCustomLambdaAuthorizer:
      type: request
-	 functionName: kpi-udm-prod-encounter-superset
-	 functionArn: arn:aws:lambda:ap-south-1:237918227349:function:kpi-udm-prod-encounter-superset
+     functionName: kpi-udm-prod-encounter-superset
+     functionArn: arn:aws:lambda:ap-south-1:237918227349:function:kpi-udm-prod-encounter-superset
 	 
 functions:
   EncounterSearch:
