@@ -1,0 +1,31 @@
+service: kpi-udm
+frameworkVersion: '3'
+package:
+  exclude:
+    - ./**
+  include:
+    - es_controller.py
+    - lambda_function.py
+provider:
+   name: aws
+   stage: dev
+   region: us-east-1
+   runtime: python3.8
+   lambdaHashingVersion: 20201221
+   deploymentBucket: lambda2129
+   iam:
+      role: arn:aws:iam::237918227349:role/lambda_basic_execution
+   httpApi:
+     id: 4t2duf2oz4
+	 name: kpi-superset-api
+	 cors: true
+   someCustomLambdaAuthorizer:
+     type: request
+	 functionName: kpi-udm-prod-encounter-superset
+	 functionArn: arn:aws:lambda:ap-south-1:237918227349:function:kpi-udm-prod-encounter-superset
+	 
+functions:
+  EncounterSearch:
+    handler: handler.encounter-superset
+	role: arn:aws:iam::237918227349:role/lambda_basic_execution
+	
