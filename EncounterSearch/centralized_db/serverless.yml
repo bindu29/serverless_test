@@ -31,7 +31,6 @@ functions:
     name: ${sls:stage}-encounter-superset
     events:
       - http:
-          path: /
-          method: post
-         cors: true   
-	
+        path: /
+        method: post
+        cors: true   
