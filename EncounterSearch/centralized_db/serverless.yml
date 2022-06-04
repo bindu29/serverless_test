@@ -9,29 +9,29 @@ package:
 provider:
    name: aws
    stage: prod
-   region: ap-south-1
+   region: us-east-1
    runtime: python3.7
    lambdaHashingVersion: 20201221
-   deploymentBucket: lambda2129
+   deploymentBucket: kpitesting
    iam:
-      role: arn:aws:iam::237918227349:role/lambda_basic_execution
+      role: arn:aws:iam::161674638527:role/lambda_basic_execution
    apiGateway:
-     restApiId: 4t2duf2oz4
-     restApiRootResourceId: k9a9rg
+     restApiId: c81bx3bn6c
+     restApiRootResourceId: vtq31q
      restApiResources:
         '/EncounterSearch': post
    logs:
      restApi:
-     role: arn:aws:iam::237918227349:role/lambda_basic_execution
+     role: arn:aws:iam::161674638527:role/lambda_basic_execution
    someCustomLambdaAuthorizer:
      type: request
      functionName: kpi-udm-prod-encounter-superset
-     functionArn: arn:aws:lambda:ap-south-1:237918227349:function:kpi-udm-prod-encounter-superset	 
+     functionArn: arn:aws:lambda:us-east-1:161674638527:function:kpi-udm-prod-encounter-superset	 
 functions:
   EncounterSearch:
     handler: handler.encounter-superset
-    role: arn:aws:iam::237918227349:role/lambda_basic_execution
-    name: ${sls:stage}-encounter-superset
+    role: arn:aws:iam::161674638527:role/lambda_basic_execution
+    #name: ${sls:stage}-encounter-superset
     events:
       - http:
         path: /
