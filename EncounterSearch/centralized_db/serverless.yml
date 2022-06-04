@@ -20,9 +20,9 @@ provider:
      restApiRootResourceId: k9a9rg
      restApiResources:
         '/EncounterSearch': post
- #  logs:
- #    restApi:
- #    role: arn:aws:iam::237918227349:role/lambda_basic_execution
+   logs:
+     restApi:
+     role: arn:aws:iam::237918227349:role/lambda_basic_execution
    someCustomLambdaAuthorizer:
      type: request
      functionName: kpi-udm-prod-encounter-superset
