@@ -27,5 +27,5 @@ provider:
 functions:
   EncounterSearch:
     handler: handler.encounter-superset
-	role: arn:aws:iam::237918227349:role/lambda_basic_execution
+    role: arn:aws:iam::237918227349:role/lambda_basic_execution
 	
