@@ -24,13 +24,13 @@ provider:
      type: request
      functionName: kpi-udm-prod-encounter-superset
      functionArn: arn:aws:lambda:ap-south-1:237918227349:function:kpi-udm-prod-encounter-superset	 
-functions:
-  encounter-superset:
-    handler: handler.encounter-superset
-    role: arn:aws:iam::237918227349:role/lambda_basic_execution
-    events:
-      - http:
-          path: /
-          method: post
-          cors: true   
+#functions:
+ # encounter-superset:
+  #  handler: handler.encounter-superset
+   # role: arn:aws:iam::237918227349:role/lambda_basic_execution
+   # events:
+   #   - http:
+   #       path: /
+   #       method: post
+   #      cors: true   
 	
