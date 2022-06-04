@@ -15,9 +15,10 @@ provider:
    deploymentBucket: lambda2129
    iam:
       role: arn:aws:iam::237918227349:role/lambda_basic_execution
-   httpApi:
-     id: 4t2duf2oz4
-     name: kpi-superset-api
+   apiGateway:
+     restApiId: 4t2duf2oz4
+     restApiResources:
+        '/EncounterSearch': post
    someCustomLambdaAuthorizer:
      type: request
      functionName: kpi-udm-prod-encounter-superset
