@@ -30,7 +30,7 @@ provider:
 functions:
   EncounterSearch:
     handler: handler.encounter-superset
-    role: role: arn:aws:iam::527774997072:service-role/kpi-dev-inbound-decrypt-role-x94sy5af
+    role: arn:aws:iam::527774997072:service-role/kpi-dev-inbound-decrypt-role-x94sy5af
     name: kpi-test-${sls:stage}-encounter-superset
     events:
       - http:
