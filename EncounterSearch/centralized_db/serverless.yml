@@ -15,11 +15,11 @@ provider:
    deploymentBucket: kpi-test-lambda
    iam:
       role: arn:aws:iam::527774997072:role/service-role/kpi-dev-inbound-decrypt-role-x94sy5af
-   apiGateway:
-     restApiId: c81bx3bn6c
-     restApiRootResourceId: vtq31q
-     restApiResources:
-        '/EncounterSearch': post
+ #  apiGateway:
+ #    restApiId: c81bx3bn6c
+ #    restApiRootResourceId: vtq31q
+ #    restApiResources:
+ #       '/EncounterSearch': post
 #   logs:
 #     restApi:
 #     role: role: arn:aws:iam::527774997072:role/service-role/kpi-dev-inbound-decrypt-role-x94sy5af
@@ -34,7 +34,11 @@ functions:
     name: kpi-test-${sls:stage}-encounter-superset
     events:
       - http:
-        path: /
+        path: /EncounterSearch
         method: post
         cors: true
+        authorizer:
+            name: kpi-dev-authorization
+            type: COGNITO_USER_POOLS
+            arn: arn:aws:cognito-idp:us-east-1:527774997072:userpool/us-east-1_QYPRYHUOv
         
