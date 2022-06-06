@@ -34,10 +34,10 @@ functions:
     name: kpi-test-${sls:stage}-encounter-superset
     events:
       - http:
-        path: /EncounterSearch
-        method: post
-        cors: true
-        authorizer:
+          path: /EncounterSearch
+          method: post
+          cors: true
+          authorizer:
             name: kpi-dev-authorization
             type: COGNITO_USER_POOLS
             arn: arn:aws:cognito-idp:us-east-1:527774997072:userpool/us-east-1_QYPRYHUOv
