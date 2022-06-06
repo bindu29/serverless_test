@@ -14,7 +14,7 @@ provider:
    lambdaHashingVersion: 20201221
    deploymentBucket: kpi-test-lambda
    iam:
-      role: arn:aws:iam::527774997072:service-role/kpi-dev-inbound-decrypt-role-x94sy5af
+      role: arn:aws:iam::527774997072:role/service-role/kpi-dev-inbound-decrypt-role-x94sy5af
    apiGateway:
      restApiId: c81bx3bn6c
      restApiRootResourceId: vtq31q
@@ -22,7 +22,7 @@ provider:
         '/EncounterSearch': post
 #   logs:
 #     restApi:
-#     role: role: arn:aws:iam::527774997072:service-role/kpi-dev-inbound-decrypt-role-x94sy5af
+#     role: role: arn:aws:iam::527774997072:role/service-role/kpi-dev-inbound-decrypt-role-x94sy5af
 #   someCustomLambdaAuthorizer:
 #     type: request
 #     functionName: kpi-udm-prod-encounter-superset
@@ -30,7 +30,7 @@ provider:
 functions:
   EncounterSearch:
     handler: handler.encounter-superset
-    role: arn:aws:iam::527774997072:service-role/kpi-dev-inbound-decrypt-role-x94sy5af
+    role: arn:aws:iam::527774997072:role/service-role/kpi-dev-inbound-decrypt-role-x94sy5af
     name: kpi-test-${sls:stage}-encounter-superset
     events:
       - http:
