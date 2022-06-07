@@ -30,7 +30,7 @@ functions:
           path: /GenerateCCD
           method: post
           cors: true
-          authorizer: kpi-dev-authorization
-
+          authorizer:
+            arn: arn:aws:cognito-idp:us-east-1:527774997072:userpool/us-east-1_QYPRYHUOv
 
   
