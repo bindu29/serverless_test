@@ -18,6 +18,8 @@ provider:
    apiGateway:
      restApiId: 7yk7kpewvi
      restApiRootResourceId: eshblsd0f6
+     restApiResources:
+       '/EncounterSearch': post
 	 
 functions:
   GenerateCCD:
