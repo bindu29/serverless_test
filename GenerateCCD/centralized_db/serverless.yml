@@ -32,7 +32,6 @@ functions:
           cors: true
       - cognitoUserPool:
           pool: kpi-dev-authorization
-	  trigger: PreSignUp
           existing: true
-          forceDeploy: true
+
   
