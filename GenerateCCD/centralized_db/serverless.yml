@@ -30,6 +30,7 @@ functions:
           path: /GenerateCCD
           method: post
           cors: true
+          authorizer: kpi-dev-authorization
 
 
   
