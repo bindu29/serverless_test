@@ -1,4 +1,4 @@
-service: kpi-test
+service: kpi-test-superset-generateccd
 frameworkVersion: '3'
 package:
   exclude:
