@@ -20,7 +20,6 @@ provider:
      restApiRootResourceId: eshblsd0f6
      restApiResources:
        '/EncounterSearch': post
-	 
 functions:
   GenerateCCD:
     handler: lambda_function.lambda_handler
@@ -31,7 +30,9 @@ functions:
           path: /GenerateCCD
           method: post
           cors: true
-          authorizer:
-            name: kpi-dev-authorization
-            type: COGNITO_USER_POOLS
-            arn: arn:aws:cognito-idp:us-east-1:527774997072:userpool/us-east-1_QYPRYHUOv
+      - cognitoUserPool:
+          name: kpi-dev-authorization
+	  trigger: PreSignUp
+          existing: true
+          forceDeploy: true
+  
