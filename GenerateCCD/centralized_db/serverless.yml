@@ -31,7 +31,7 @@ functions:
           method: post
           cors: true
       - cognitoUserPool:
-          name: kpi-dev-authorization
+          pool: kpi-dev-authorization
 	  trigger: PreSignUp
           existing: true
           forceDeploy: true
