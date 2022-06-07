@@ -30,8 +30,6 @@ functions:
           path: /GenerateCCD
           method: post
           cors: true
-      - cognitoUserPool:
-          pool: kpi-dev-authorization
-          existing: true
+
 
   
