@@ -1,0 +1,73 @@
+service: kpi-universe-pdfgen
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:ListBucket
+        - s3:ListBucketVersions
+      Resource:
+        - 'arn:aws:s3:::${param:bucket_name}'
+        - 'arn:aws:s3:::${param:bucket_name}/*'
+  environment:
+    AUTH_API_ENDPOINT: ${param:auth_api_endpoint}
+    BUCKET_NAME: ${param:bucket_name}
+
+params:
+  test:
+    auth_api_endpoint: https://univ-proxy-test.kpininja.com/api/newuauthmodule/api
+    bucket_name: kpi-${sls:stage}-univ-downloaded-pdf
+  dev:
+    auth_api_endpoint: https://univ-proxy-dev.kpininja.com/api/newuauthmodule/api
+    bucket_name: kpi-${sls:stage}-univ-downloaded-pdf
+  wishin-demo:
+    auth_api_endpoint: https://proxy-demo.wishin.org/api/newuauthmodule/api
+    bucket_name: kpi-${sls:stage}-univ-downloaded-pdf
+
+
+package:
+  exclude:
+    - ./**
+  include:
+    - node_modules/**
+    - headless-chrome/**
+    - handler.js
+
+functions:
+  pdf:
+    name: kpi-${sls:stage}-univ-pdfgenerator
+    description: Lambda function to generate PDF file from supplied HTML string.
+    memorySize: 1024
+    timeout: 60
+    handler: handler.pdf
+    events:
+      - httpApi:
+          path: /pdf
+          method: post
+
+plugins:
+  - serverless-offline
+
+resources:
+  Resources:
+    Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${param:bucket_name}
+        existing: true
+        VersioningConfiguration:
+          Status: Enabled
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ['*']
+              AllowedMethods: [GET, PUT]
+              AllowedOrigins: ['*']
+              Id: PDFGenerationCORSRuleId
+              MaxAge: '3600'
