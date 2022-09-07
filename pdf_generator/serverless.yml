@@ -61,7 +61,6 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${param:bucket_name}
-        existing: true
         VersioningConfiguration:
           Status: Enabled
         CorsConfiguration:
