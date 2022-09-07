@@ -51,7 +51,11 @@ functions:
       - httpApi:
           path: /pdf
           method: post
-
+      - s3:
+           bucket: 'kpi-dev-univ-download-pdf'
+           events: s3:ObjectCreated:*
+           existing: true
+          
 plugins:
   - serverless-offline
 
