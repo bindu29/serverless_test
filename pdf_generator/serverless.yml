@@ -23,13 +23,13 @@ provider:
 params:
   test:
     auth_api_endpoint: https://univ-proxy-test.kpininja.com/api/newuauthmodule/api
-    bucket_name: kpi-${sls:stage}-univ-downloaded-pdf
+    bucket_name: kpi-${sls:stage}-univ-download-pdf
   dev:
     auth_api_endpoint: https://univ-proxy-dev.kpininja.com/api/newuauthmodule/api
-    bucket_name: kpi-${sls:stage}-univ-downloaded-pdf
+    bucket_name: kpi-${sls:stage}-univ-download-pdf
   wishin-demo:
     auth_api_endpoint: https://proxy-demo.wishin.org/api/newuauthmodule/api
-    bucket_name: kpi-${sls:stage}-univ-downloaded-pdf
+    bucket_name: kpi-${sls:stage}-univ-download-pdf
 
 
 package:
