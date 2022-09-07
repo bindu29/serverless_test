@@ -26,7 +26,7 @@ params:
     bucket_name: kpi-${sls:stage}-univ-download-pdf
   dev:
     auth_api_endpoint: https://univ-proxy-dev.kpininja.com/api/newuauthmodule/api
-    bucket_name: kpi-${sls:stage}-univ-download-pdf
+    bucket_name: kpi-dev-univ-download-pdf
   wishin-demo:
     auth_api_endpoint: https://proxy-demo.wishin.org/api/newuauthmodule/api
     bucket_name: kpi-${sls:stage}-univ-download-pdf
@@ -60,7 +60,7 @@ resources:
     Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${param:bucket_name}
+        BucketName: kpi-dev-univ-download-pdf
         VersioningConfiguration:
           Status: Enabled
         CorsConfiguration:
