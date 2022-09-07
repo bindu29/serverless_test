@@ -51,26 +51,22 @@ functions:
       - httpApi:
           path: /pdf
           method: post
-      - s3:
-           bucket: 'kpi-dev-univ-download-pdf'
-           events: s3:ObjectCreated:*
-           existing: true
           
 plugins:
   - serverless-offline
 
-resources:
-  Resources:
-    Bucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: kpi-dev-univ-download-pdf
-        VersioningConfiguration:
-          Status: Enabled
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders: ['*']
-              AllowedMethods: [GET, PUT]
-              AllowedOrigins: ['*']
-              Id: PDFGenerationCORSRuleId
-              MaxAge: '3600'
+#resources:
+ # Resources:
+  #  Bucket:
+   #   Type: AWS::S3::Bucket
+    #  Properties:
+     #   BucketName: kpi-dev-univ-download-pdf
+      #  VersioningConfiguration:
+       #   Status: Enabled
+        #CorsConfiguration:
+         # CorsRules:
+          #  - AllowedHeaders: ['*']
+           #   AllowedMethods: [GET, PUT]
+            #  AllowedOrigins: ['*']
+             # Id: PDFGenerationCORSRuleId
+              #MaxAge: '3600'
