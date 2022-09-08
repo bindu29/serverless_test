@@ -66,13 +66,13 @@ resources:
           Condition: !If
             - UploadBucket 
             - !Ref AWS::S3
-         BucketName: ${param:bucket_name}
-         VersioningConfiguration:
-            Status: Enabled
-         CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders: ['*']
-              AllowedMethods: [GET, PUT]
-              AllowedOrigins: ['*']
-              Id: PDFGenerationCORSRuleId
-              MaxAge: '3600'
+            - BucketName: ${param:bucket_name}
+                VersioningConfiguration:
+                Status: Enabled
+                CorsConfiguration:
+                  CorsRules:
+                   - AllowedHeaders: ['*']
+                     AllowedMethods: [GET, PUT]
+                     AllowedOrigins: ['*']
+                     Id: PDFGenerationCORSRuleId
+                     MaxAge: '3600'
