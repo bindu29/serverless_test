@@ -25,10 +25,6 @@ params:
     bucket_name: demo-${sls:stage}-download-bird
   dev:
     bucket_name: demo-${sls:stage}-download-bird
-  ExistingS3Bucket:
-     Default: demo-dev-download-bird
-     Description: Name of an existing S3 Bucket 
-     Type: AWS::S3::ExistingS3Bucket
 
 
 package:
@@ -59,20 +55,17 @@ resources:
     UploadBucket: 
       Fn::Equals: [ Ref: AWS::S3, "demo-dev-download-bird" ]
   
-  Resources:
-    Bucket:
-      Type: AWS::S3::Bucket
-      Properties:
-          Condition: !If
-            - UploadBucket 
-            - !Ref AWS::S3
-            - BucketName: ${param:bucket_name}
-                VersioningConfiguration:
-                Status: Enabled
-                CorsConfiguration:
-                  CorsRules:
-                   - AllowedHeaders: ['*']
-                     AllowedMethods: [GET, PUT]
-                     AllowedOrigins: ['*']
-                     Id: PDFGenerationCORSRuleId
-                     MaxAge: '3600'
+  #Resources:
+   # Bucket:
+    #  Type: AWS::S3::Bucket
+     # Properties:
+      #    BucketName: ${param:bucket_name}
+       #   VersioningConfiguration:
+        #  Status: Enabled
+         # CorsConfiguration:
+          #   CorsRules:
+           #    - AllowedHeaders: ['*']
+            #     AllowedMethods: [GET, PUT]
+            #     AllowedOrigins: ['*']
+             #    Id: PDFGenerationCORSRuleId
+              #   MaxAge: '3600'
