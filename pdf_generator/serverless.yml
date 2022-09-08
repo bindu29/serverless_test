@@ -50,10 +50,7 @@ functions:
 plugins:
   - serverless-offline
 
-resources:
-  Conditions: 
-    UploadBucket: 
-      Fn::Equals: [ Ref: AWS::S3, "demo-dev-download-bird" ]
+
   
   #Resources:
    # Bucket:
