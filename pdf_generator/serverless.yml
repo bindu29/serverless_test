@@ -46,23 +46,24 @@ functions:
       - httpApi:
           path: /pdf
           method: post
+          cors: true
+          
           
 plugins:
   - serverless-offline
 
 
   
-  Resources:
-    Bucket:
+  #Resources:
+   # Bucket:
     #  Type: AWS::S3::Bucket
      # Properties:
       #    BucketName: ${param:bucket_name}
        #   VersioningConfiguration:
         #  Status: Enabled
-         CorsConfiguration:
-             CorsRules:
-               - AllowedHeaders: ['*']
-                 AllowedMethods: [GET, PUT]
-                 AllowedOrigins: ['*']
-                 Id: PDFGenerationCORSRuleId
-                 MaxAge: '3600'
+       #  CorsConfiguration:
+        #     CorsRules:
+         #      - AllowedHeaders: ['*']
+          #       AllowedMethods: [GET, PUT]
+           #     Id: PDFGenerationCORSRuleId
+            #     MaxAge: '3600'
