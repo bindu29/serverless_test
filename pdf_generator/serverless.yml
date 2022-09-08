@@ -57,13 +57,15 @@ plugins:
 resources:
   Conditions: 
     UploadBucket: 
-      Fn::Equals: [ Ref: AWS::S3::ExistingS3Bucket, "dev" ]
+      Fn::Equals: [ Ref: AWS::S3, "demo-dev-download-bird" ]
   
   Resources:
     Bucket:
       Type: AWS::S3::Bucket
-      Condition: UploadBucket
       Properties:
+          Condition: !If
+            - UploadBucket 
+            - !Ref AWS::S3
          BucketName: ${param:bucket_name}
          VersioningConfiguration:
             Status: Enabled
