@@ -1,4 +1,4 @@
-service: kpi-universe-pdfgen
+service: demo
 frameworkVersion: '3'
 
 provider:
@@ -17,21 +17,16 @@ provider:
         - 'arn:aws:s3:::${param:bucket_name}'
         - 'arn:aws:s3:::${param:bucket_name}/*'
   environment:
-    AUTH_API_ENDPOINT: ${param:auth_api_endpoint}
+   
     BUCKET_NAME: ${param:bucket_name}
 
 params:
   test:
-    auth_api_endpoint: https://univ-proxy-test.kpininja.com/api/newuauthmodule/api
-    bucket_name: kpi-${sls:stage}-univ-download-pdf
+    bucket_name: demo-${sls:stage}-download-bird
   dev:
-    auth_api_endpoint: https://univ-proxy-dev.kpininja.com/api/newuauthmodule/api
-    bucket_name: kpi-${sls:stage}-univ-download-pdf
-  wishin-demo:
-    auth_api_endpoint: https://proxy-demo.wishin.org/api/newuauthmodule/api
-    bucket_name: kpi-${sls:stage}-univ-download-pdf
+    bucket_name: demo-${sls:stage}-download-bird
   ExistingS3Bucket:
-     Default: kpi-dev-univ-download-pdf
+     Default: demo-dev-download-bird
      Description: Name of an existing S3 Bucket 
      Type: AWS::S3::ExistingS3Bucket
 
@@ -46,8 +41,8 @@ package:
 
 functions:
   pdf:
-    name: kpi-${sls:stage}-univ-pdfgenerator
-    description: Lambda function to generate PDF file from supplied HTML string.
+    name: demo-${sls:stage}-bird
+    description: Lambda function to generate the file
     memorySize: 1024
     timeout: 60
     handler: handler.pdf
