@@ -53,7 +53,7 @@ plugins:
 
   
   Resources:
-   # Bucket:
+    Bucket:
     #  Type: AWS::S3::Bucket
      # Properties:
       #    BucketName: ${param:bucket_name}
