@@ -31,7 +31,7 @@ params:
     auth_api_endpoint: https://proxy-demo.wishin.org/api/newuauthmodule/api
     bucket_name: kpi-${sls:stage}-univ-download-pdf
   ExistingS3Bucket:
-    bucket_name: kpi-${sls:stage}-univ-download-pdf
+    bucket_name: kpi-dev-univ-download-pdf
 
 
 package:
@@ -59,16 +59,17 @@ plugins:
 
 resources:
   Conditions: 
-  CreateS3Bucket: !Equals 
-  - !Ref ExistingS3Bucket
-  - true
+    UploadBucket: 
+      Fn::Equals:
+        - !Ref ExistingS3Bucket
+        - dev
   
   Resources:
     Bucket:
       Type: AWS::S3::Bucket
-      Condition: CreateS3Bucket
+      Condition: UploadBucket
       Properties:
-         BucketName: !If [CreateS3Bucket, !Ref Bucket, !Ref ExistingS3Bucket] 
+         BucketName: ${param:bucket_name}
          VersioningConfiguration:
             Status: Enabled
          CorsConfiguration:
