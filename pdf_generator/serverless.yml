@@ -6,6 +6,7 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: us-east-1
+  deploymentBucket: kpi-dev-univ-download-pdf
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -60,12 +61,12 @@ resources:
   Resources:
     Bucket:
       Type: AWS::S3::Bucket
- #     Properties:
-      BucketName: kpi-dev-univ-download-pdf
-      VersioningConfiguration:
-         Status: Enabled
-      CorsConfiguration:
-         CorsRules:
+      Properties:
+         BucketName: kpi-dev-univ-download-pdf
+         VersioningConfiguration:
+            Status: Enabled
+         CorsConfiguration:
+          CorsRules:
             - AllowedHeaders: ['*']
               AllowedMethods: [GET, PUT]
               AllowedOrigins: ['*']
