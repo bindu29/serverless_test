@@ -61,11 +61,11 @@ resources:
     Bucket:
       Type: AWS::S3::Bucket
  #     Properties:
-        BucketName: kpi-dev-univ-download-pdf
-        VersioningConfiguration:
-          Status: Enabled
-        CorsConfiguration:
-          CorsRules:
+      BucketName: kpi-dev-univ-download-pdf
+      VersioningConfiguration:
+         Status: Enabled
+      CorsConfiguration:
+         CorsRules:
             - AllowedHeaders: ['*']
               AllowedMethods: [GET, PUT]
               AllowedOrigins: ['*']
