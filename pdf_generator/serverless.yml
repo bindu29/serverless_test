@@ -59,7 +59,9 @@ plugins:
 
 resources:
   Conditions: 
-  CreateS3Bucket: !Equals [!Ref ExistingS3Bucket, ""]
+  CreateS3Bucket: !Equals 
+  - !Ref ExistingS3Bucket
+  - true
   
   Resources:
     Bucket:
