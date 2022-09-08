@@ -31,7 +31,9 @@ params:
     auth_api_endpoint: https://proxy-demo.wishin.org/api/newuauthmodule/api
     bucket_name: kpi-${sls:stage}-univ-download-pdf
   ExistingS3Bucket:
-    bucket_name: kpi-dev-univ-download-pdf
+     Default: kpi-dev-univ-download-pdf
+     Description: Name of an existing S3 Bucket 
+     Type: AWS::S3::ExistingS3Bucket
 
 
 package:
@@ -61,7 +63,7 @@ resources:
   Conditions: 
     UploadBucket: 
       Fn::Equals:
-        - !Ref ExistingS3Bucket
+        - !Ref 'ExistingS3Bucket'
         - dev
   
   Resources:
