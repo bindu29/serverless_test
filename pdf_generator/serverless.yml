@@ -54,19 +54,20 @@ functions:
           
 plugins:
   - serverless-offline
+  - serverless-plugin-existing-s3
 
-#resources:
- # Resources:
-  #  Bucket:
-   #   Type: AWS::S3::Bucket
-    #  Properties:
-     #   BucketName: kpi-dev-univ-download-pdf
-      #  VersioningConfiguration:
-       #   Status: Enabled
-        #CorsConfiguration:
-         # CorsRules:
-          #  - AllowedHeaders: ['*']
-           #   AllowedMethods: [GET, PUT]
-            #  AllowedOrigins: ['*']
-             # Id: PDFGenerationCORSRuleId
-              #MaxAge: '3600'
+resources:
+  Resources:
+    Bucket:
+      Type: AWS::S3::Bucket
+ #     Properties:
+        BucketName: kpi-dev-univ-download-pdf
+        VersioningConfiguration:
+          Status: Enabled
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ['*']
+              AllowedMethods: [GET, PUT]
+              AllowedOrigins: ['*']
+              Id: PDFGenerationCORSRuleId
+              MaxAge: '3600'
