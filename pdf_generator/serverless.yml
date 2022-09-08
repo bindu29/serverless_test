@@ -57,8 +57,7 @@ plugins:
 resources:
   Conditions: 
     UploadBucket: 
-      Fn::Equals: [ Ref: AWS::S3::ExistingS3Bucket, "demo-dev-download-bird" ]
-        - dev
+      Fn::Equals: [ Ref: AWS::S3::ExistingS3Bucket, "dev" ]
   
   Resources:
     Bucket:
