@@ -6,7 +6,6 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: us-east-1
-  deploymentBucket: kpi-dev-univ-download-pdf
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -27,7 +26,7 @@ params:
     bucket_name: kpi-${sls:stage}-univ-download-pdf
   dev:
     auth_api_endpoint: https://univ-proxy-dev.kpininja.com/api/newuauthmodule/api
-    bucket_name: kpi-dev-univ-download-pdf
+    bucket_name: kpi-${sls:stage}-univ-download-pdf
   wishin-demo:
     auth_api_endpoint: https://proxy-demo.wishin.org/api/newuauthmodule/api
     bucket_name: kpi-${sls:stage}-univ-download-pdf
@@ -62,7 +61,6 @@ resources:
     Bucket:
       Type: AWS::S3::Bucket
       Properties:
-         BucketName: kpi-dev-univ-download-pdf
          VersioningConfiguration:
             Status: Enabled
          CorsConfiguration:
@@ -72,3 +70,7 @@ resources:
               AllowedOrigins: ['*']
               Id: PDFGenerationCORSRuleId
               MaxAge: '3600'
+Outputs:
+  Bucket:
+   Value:
+     Ref: ${param:bucket_name}
