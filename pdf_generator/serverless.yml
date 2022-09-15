@@ -1,4 +1,4 @@
-service: kpi-demo
+service: demo
 frameworkVersion: '3'
 
 provider:
