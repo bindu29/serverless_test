@@ -46,7 +46,6 @@ functions:
       - httpApi:
           path: /pdf
           method: post
-          cors: true
           
           
 plugins:
