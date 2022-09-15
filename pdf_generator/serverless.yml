@@ -53,7 +53,7 @@ plugins:
 
 resources:
  Conditions:
-     NotCreateStageResource: !Not ["${opt.dev}", "theStageToSkip"]
+     NotCreateStageResource: !Not [dev, "theStageToSkip"]
  Resources:
     Bucket:
       Type: AWS::S3::Bucket
