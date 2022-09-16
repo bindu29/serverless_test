@@ -51,21 +51,21 @@ functions:
 plugins:
   - serverless-offline
 
-resources:
- Conditions:
-     NotCreateStageResource: !Not [!Equals ["${sls:stage}", "dev"]]
- Resources:
-    Bucket:
-      Type: AWS::S3::Bucket
-      Condition: NotCreateStageResource
-      Properties:
-        BucketName: ${param:bucket_name}
-        VersioningConfiguration:
-          Status: Enabled
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders: ['*']
-              AllowedMethods: [GET, PUT]
-              AllowedOrigins: ['*']
-              Id: PDFGenerationCORSRuleId
-              MaxAge: '3600'
+#resources:
+ #Conditions:
+  #   NotCreateStageResource: !Not [!Equals ["${sls:stage}", "dev"]]
+ #Resources:
+  #  Bucket:
+   #   Type: AWS::S3::Bucket
+    #  Condition: NotCreateStageResource
+     # Properties:
+      #  BucketName: ${param:bucket_name}
+       # VersioningConfiguration:
+        #  Status: Enabled
+        #CorsConfiguration:
+         # CorsRules:
+          #  - AllowedHeaders: ['*']
+           #   AllowedMethods: [GET, PUT]
+            #  AllowedOrigins: ['*']
+             # Id: PDFGenerationCORSRuleId
+              #MaxAge: '3600'
