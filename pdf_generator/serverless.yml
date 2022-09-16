@@ -53,7 +53,7 @@ plugins:
 
 resources:
  Conditions:
-     NotCreateStageResource: !Equals ["${sls:dev}", "true"]
+     NotCreateStageResource: !Equals ["${sls:stage}", "dev"]
  Resources:
     Bucket:
       Type: AWS::S3::Bucket
