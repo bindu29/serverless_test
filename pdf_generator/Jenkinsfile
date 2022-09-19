@@ -1,0 +1,289 @@
+pipeline {
+    agent any
+    tools {
+        maven 'maven_3.6.3'
+        jdk 'Open_JDK1.8'
+    }
+     environment {
+        registry_develop = "161674638527.dkr.ecr.us-east-1.amazonaws.com/kpininja/test"
+        registry_master = "161674638527.dkr.ecr.us-east-1.amazonaws.com/kpininja/dev"
+        registry_WISHIN_Demo = "161674638527.dkr.ecr.us-east-1.amazonaws.com/kpininja/wishin-demo"
+        registry_WISHIN_Test = "161674638527.dkr.ecr.us-east-1.amazonaws.com/kpininja/wishin-test"
+        ASSUME_ROLE_ARN="arn:aws:iam::161674638527:role/s3_document_upload_role"
+        project_name="kpi-pdf-generator-api"
+		project_name_javadoc="kpi-univ-users-api-javadoc"
+        issueGen = sh(script: "bash /var/lib/jenkins/jenkins_comment_test.sh")
+        issueKey = sh(script: "cat /var/lib/jenkins/tmp/env.properties", returnStdout: true).trim()
+        SonarScan = "https://codequality-cicd.kpininja.com/dashboard?id=${project_name}"
+        commit_id=sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+		webhook = "https://healthcarequalitycatalyst.webhook.office.com/webhookb2/a69ca3dd-9cd3-430d-a10e-3dd13dc3c0a3@52807a8b-794c-4c07-825f-578847e1257e/JenkinsCI/9a7baa79a34041398fdf71dcd32041b5/20bd18ef-4f6c-4555-8777-eb09f65bfb8c"
+		
+    }
+    stages {
+        stage('Developer Testing') {
+					when { 
+						changelog ".* chore-deploy.:*"
+						anyOf {
+							branch "PR-*"
+							branch "bugfix/*"
+							branch "feature/*"
+							branch "hotfix/*"
+							}
+						 }
+	                    steps {
+	                         withAWS(credentials: 'kpi-develop-eks', region: 'us-east-1') {
+			                sh "aws --version"
+			                
+	                    }
+	                  } 
+	                } 
+        stage("Code Quality Check") {
+	                    when { branch 'PR-*' }
+	        
+	       	        }
+	        stage("Rest Doc") {
+	            parallel {
+	                stage('Develop') {
+	                    when {
+			                branch 'develop'
+			                }
+				       steps {
+				            
+				               withAWS(credentials: 'kpi-develop-eks', region: 'us-east-1')
+                                {
+			                        sh '''
+                                    aws --version
+			                     '''
+	                              }
+				            }
+	                	}   
+	            	}
+	        	}
+			stage("Java Doc") {
+	            parallel {
+	                stage('Develop') {
+	                    when {
+			                branch 'develop'
+			                }
+				        steps {
+				            
+				               withAWS(credentials: 'kpi-develop-eks', region: 'us-east-1')
+                                {
+			                        sh '''
+                                    aws --version
+			                     '''
+	                              }
+				            }
+	                	}   
+	            	}
+	        	}  
+  
+            stage("Build") {
+	            parallel {
+	                stage('dev') {
+	                    when {branch 'master' }
+	                    steps {
+	                        sh '''
+			                npm install
+			                '''
+	                    }
+	                }
+                    stage('test') {
+	                    when {branch 'develop' }
+	                    steps {
+	                        sh '''
+			                npm install
+			                '''
+	                    }
+	                }
+	                stage("WISHIN-Demo") {
+	                     when {
+			                branch 'release/wishin-demo'
+			                }
+			                
+			            steps {
+			                sh '''
+			                npm install
+			                '''
+			            }
+	                }
+	                stage("WISHIN-Test") {
+	                     when {
+			                branch 'release/wishin-test'
+			                }
+			                
+			            steps {
+			                sh '''
+			               npm install
+			                '''
+			            }
+	                }
+	                
+	            }
+	        }    
+        stage("Deploy") {
+	            parallel {
+	                stage('Dev') {
+	                    when {  branch 'master' }
+	                    steps {
+	                         withAWS(credentials: 'kpi-develop-eks', region: 'us-east-1') {
+			                sh "aws --version"
+			                sh "npm install serverless"
+			                sh "serverless deploy --stage dev"
+			               
+	                    }
+	                  } 
+	                }
+	                stage("Test") {
+	                    when {branch 'develop' }
+	                    steps {
+	                         withAWS(credentials: 'kpi-develop-eks', region: 'us-east-1') {
+			                sh "aws --version"
+			                sh "npm install serverless"
+			                sh "serverless deploy --stage test"
+	                    }
+	                  }
+	                }
+	                 stage("WISHIN-Demo") {
+	                    when { branch 'release/wishin-demo'}
+	                    steps {
+	                        withAWS(credentials: 'Wishin-admin', region: 'us-east-1') {
+								sh "aws --version"
+			                sh "npm install serverless"
+			                sh "serverless deploy --stage wishin-demo"
+							}
+	                    }
+	                }
+                     stage("WISHIN-test") {
+	                    when { branch 'release/wishin-demo'}
+	                    steps {
+	                        withAWS(credentials: 'Wishin-admin', region: 'us-east-1') {
+								sh "aws --version"
+			                sh "npm install serverless"
+			                sh "serverless deploy --stage wishin-test"
+							}
+	                    }
+	                }
+    
+     
+    }
+    post {
+        success {
+          script {
+            if (env.BRANCH_NAME == 'PR-*') {
+             echo "success...."
+             bitbucketStatusNotify(buildState: 'SUCCESSFUL')
+			 slackSend channel: '#kpi-univ-build-alerts', message: 'kpi-pdf-generator-api -' + env.BRANCH_NAME + 'PR Checks Passed'
+             jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+             jiraComment body: "PR checks are passed SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+			 office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "SUCCESS"
+        
+            }
+            if (env.BRANCH_NAME == 'develop') {
+             echo "success...."
+             bitbucketStatusNotify(buildState: 'SUCCESSFUL')
+             slackSend channel: '#kpi-univ-build-alerts', message: 'kpi-pdf-generator-api -' + env.BRANCH_NAME +' Build Successful for Dev Environment'
+			 jiraSendDeploymentInfo environmentId: 'dev', environmentName: 'Develop', environmentType: 'development', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+             jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+             jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+             jiraComment body: "Build Passed for develop env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+			 office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "SUCCESS"
+
+             } 
+             if (env.BRANCH_NAME == 'master') {
+                echo "success...."
+                bitbucketStatusNotify(buildState: 'SUCCESSFUL')
+                slackSend channel: '#kpi-univ-build-alerts', message: 'kpi-pdf-generator-api -' + env.BRANCH_NAME +' Build Successful for Test Environment'
+				jiraSendDeploymentInfo environmentId: 'test', environmentName: 'Testing', environmentType: 'staging', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+                jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+                jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                jiraComment body: "Build Passed for test env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+				office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "SUCCESS"
+				
+              } 
+              if (env.BRANCH_NAME == 'release/wishin-demo') {
+                 echo "success...."
+                 bitbucketStatusNotify(buildState: 'SUCCESSFUL')
+                 jiraSendDeploymentInfo environmentId: 'dev', environmentName: 'WISHIN_Demo', environmentType: 'staging', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+                 jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+                 jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                 jiraComment body: "Build Passed for WISHIN_Demo env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+				 office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "SUCCESS"
+				 sh "docker rmi $registry_WISHIN_Demo:$project_name-$commit_id | true"
+               } 
+               if (env.BRANCH_NAME == 'release/wishin-test') {
+                    echo "success...."
+                    bitbucketStatusNotify(buildState: 'SUCCESSFUL')
+                    jiraSendDeploymentInfo environmentId: 'test', environmentName: 'WISHIN_Test', environmentType: 'staging', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+                    jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+                    jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                    jiraComment body: "Build Passed for WISHIN_Test env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+					office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "SUCCESS"
+					sh "docker rmi $registry_WISHIN_Test:$project_name-$commit_id | true"
+                } 
+               
+        }
+        
+  }
+        
+
+
+        failure {
+          script {
+            
+            if (env.BRANCH_NAME == 'PR-*') {
+                 echo "failure..."
+                 bitbucketStatusNotify(buildState: 'FAILURE')
+				 slackSend channel: '#kpi-univ-build-alerts', message: 'kpi-pdf-generator-api -' + env.BRANCH_NAME +' PR Checks Failed'
+                 jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                 jiraComment body: "PR checks are failed SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+				 office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "FAILURE"
+				 
+             }
+             if (env.BRANCH_NAME == 'develop') {
+                 echo "failure..."
+                 bitbucketStatusNotify(buildState: 'FAILURE')
+                 slackSend channel: '#kpi-univ-build-alerts', message: 'kpi-pdf-generator-api -' + env.BRANCH_NAME +' Build Failed for Dev Environment'
+				 jiraSendDeploymentInfo environmentId: 'dev', environmentName: 'Develop', environmentType: 'development', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+                 jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+                 jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                 jiraComment body: "Build Fail for develop env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+				 office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "FAILURE"
+                 
+             } 
+             if (env.BRANCH_NAME == 'master') {
+                  echo "failure...."
+                  bitbucketStatusNotify(buildState: 'FAILURE')
+                  slackSend channel: '#kpi-univ-build-alerts', message: 'kpi-pdf-generator-api -' + env.BRANCH_NAME +' Build Failed for Test Environment'
+				  jiraSendDeploymentInfo environmentId: 'test', environmentName: 'Testing', environmentType: 'staging', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+                  jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+                  jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                  jiraComment body: "Build Fail for test env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+				  office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "FAILURE"
+                 
+              }
+              if (env.BRANCH_NAME == 'release/wishin-demo') {
+                   echo "failure...."
+                   bitbucketStatusNotify(buildState: 'FAILURE')
+                   jiraSendDeploymentInfo environmentId: 'dev', environmentName: 'WISHIN_Demo', environmentType: 'staging', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+                   jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+                   jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                   jiraComment body: "Build Fail for WISHIN_Demo env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+				   office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "FAILURE"
+                   
+               }
+               if (env.BRANCH_NAME == 'release/wishin-test') {
+                    echo "failure...."
+                    bitbucketStatusNotify(buildState: 'FAILURE')
+                    jiraSendDeploymentInfo environmentId: 'test', environmentName: 'WISHIN-Test', environmentType: 'staging', issueKeys: ["${issueKey}"], site: 'kpininja.atlassian.net', state: 'successful'
+                    jiraSendBuildInfo branch: "${issueKey}", site: 'kpininja.atlassian.net'
+                    jiraIssueSelector(issueSelector: [$class: 'DefaultIssueSelector'])
+                    jiraComment body: "Build Fail for WISHIN_Test env ${BUILD_URL} SonarQube Report - ${SonarScan}", issueKey: "${issueKey}"
+					office365ConnectorSend webhookUrl: "${webhook}" , message: "${project_name}  Sonar ${SonarScan} JIRA ${issueKey}", status: "FAILURE"
+                    
+                }
+                 
+          }
+        
+    }
+}
