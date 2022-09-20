@@ -57,7 +57,7 @@ plugins:
 
 resources:
  Conditions:
-     NotCreateStageResource: !Not [!Equals ["${sls:stage}", "dev"]]
+     NotCreateStageResource: !Not [!Equals ["${sls:stage}", "prod"]]
  Resources:
     Bucket:
       Type: AWS::S3::Bucket
