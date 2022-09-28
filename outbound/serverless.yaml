@@ -1,0 +1,77 @@
+service: kpi-sso-outbound-gateway
+
+frameworkVersion: "3"
+
+useDotenv: true
+
+custom:
+#  customDomain:
+#    domainName: ssooutbound-testing.kpininja.com
+#    basePath: ""
+#    stage: ${self:provider.stage}
+#    createRoute53Record: true
+  serverless-offline:
+    host: "localhost"
+    httpPort: 5000
+    # httpsProtocol: "dev-certs"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: "dev"
+  region: us-east-1
+  lambdaHashingVersion: 20210705
+  environment:
+    NODE_ENV: development
+    AWS_SECRET_NAME: kpi-test-sso-outbound
+    AWS_SECRET_REGION: us-east-1
+    AWS_SECRET_FLAG: 0
+    KPI_FAVICON: https://universe-prod-kpininja-s3.s3.amazonaws.com/universe_logo/kpininja-favicon.png
+    KPI_LOGO: https://universe-prod-kpininja-s3.s3.amazonaws.com/universe_logo/kpiNinja.png
+
+functions:
+  indexRoute:
+    handler: ./handler.index
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
+  authorizeRoute:
+    handler: ./handler.authorize
+    events:
+      - http:
+          path: /oauth2/authorize
+          method: get
+          cors: true
+  tokenRoute:
+    handler: ./handler.token
+    events:
+      - http:
+          path: /oauth2/token
+          method: post
+          cors: true
+  verifyRoute:
+    handler: ./handler.verify
+    events:
+      - http:
+          path: /oauth2/verify
+          method: post
+          cors: true
+  metadataGet:
+    handler: ./handler.metadata
+    events:
+      - http:
+          path: metadata
+          method: get
+          cors: true
+  metadataR4Get:
+    handler: ./handler.metadataR4
+    events:
+      - http:
+          path: /metadata/r4
+          method: get
+          cors: true
+plugins:
+  - serverless-offline # adding the plugin to be able to run the offline emulation
+  #- serverless-domain-manager
