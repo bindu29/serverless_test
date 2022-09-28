@@ -22,8 +22,8 @@ provider:
   region: us-east-1
   lambdaHashingVersion: 20210705
   environment:
-    NODE_ENV: development
-    AWS_SECRET_NAME: kpi-test-sso-outbound
+    NODE_ENV: production
+    AWS_SECRET_NAME: kpi-prod-sso-outbound
     AWS_SECRET_REGION: us-east-1
     AWS_SECRET_FLAG: 0
     KPI_FAVICON: https://universe-prod-kpininja-s3.s3.amazonaws.com/universe_logo/kpininja-favicon.png
